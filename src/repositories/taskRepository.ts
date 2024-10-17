@@ -13,13 +13,28 @@ export const retriveSingleTaskById = async (
   return task;
 };
 
+export const retriveSingleTaskByUserId = async (
+  userId: string
+): Promise<Task | null> => {
+    const task = await db.Task.findOne({ where: { userId } });
+
+  return task;
+};
+
 export const assignTask = async (
   assigneeId: string,
   taskId: string
 ): Promise<void> => {
-  console.log(assigneeId, taskId);
+
   await db.Task.update(
     { assigneeId: assigneeId }, // Fields to update
     { where: { id: taskId } }
   );
 };
+
+
+export const modifyTaskStatus = async (status: string, userId:string): Promise<void> => {
+    await db.Task.update({status}, {
+        where:{userId}  
+    })
+}

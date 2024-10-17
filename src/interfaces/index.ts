@@ -48,3 +48,7 @@ export interface TaskAssignmentInterface{
   taskId: string;
   assigneeId: string;
 }
+
+export interface ModifyTaskStatusInterface{
+  status: number
+}

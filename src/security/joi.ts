@@ -1,5 +1,12 @@
 import Joi, { ValidationResult } from "joi";
-import { TaskAssignmentInterface, TaskInterface, UserSignInInput, UserSinUpInput } from "@interfaces";
+import {
+  ModifyTaskStatusInterface,
+  TaskAssignmentInterface,
+  TaskInterface,
+  UserSignInInput,
+  UserSinUpInput,
+} from "@interfaces";
+import { modifyTaskStatusController } from "@controllers/TaskConttroller";
 
 // Define the user schema with TypeScript types
 const userSchema = Joi.object({
@@ -91,7 +98,6 @@ const taskSchema = Joi.object({
     }),
 });
 
-
 // assign Task Schema
 export const assignTaskValidationSchema = Joi.object({
   taskId: Joi.string()
@@ -109,6 +115,10 @@ export const assignTaskValidationSchema = Joi.object({
       "string.empty": "Assignee ID is required",
       "string.guid": "Assignee ID must be a valid UUID",
     }),
+});
+
+export const modifyTaskStatusSchema = Joi.object({
+  status: Joi.number().required(),
 });
 
 // Reusable validation function with explicit types
@@ -134,11 +144,16 @@ export const validateTaskInput = (
   return taskSchema.validate(userData, { abortEarly: false });
 };
 
-
 export const validateTaskAssignmentInput = (
   userData: TaskAssignmentInterface
 ): ValidationResult => {
   return assignTaskValidationSchema.validate(userData, { abortEarly: false });
+};
+
+export const validateModifyTaskStatusEntry = (
+  userData: ModifyTaskStatusInterface
+): ValidationResult => {
+  return modifyTaskStatusSchema.validate(userData, { abortEarly: false });
 };
 
 // Admin validation

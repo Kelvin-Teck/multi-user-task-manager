@@ -1,6 +1,10 @@
 import { taskRepository, userRepository } from "@repositories";
 import { retriveSingleTaskById } from "@repositories/taskRepository";
-import { validateTaskAssignmentInput, validateTaskInput } from "@security/joi";
+import {
+  validateModifyTaskStatusEntry,
+  validateTaskAssignmentInput,
+  validateTaskInput,
+} from "@security/joi";
 import { HttpStatus, newError } from "@utils";
 import { Request } from "express";
 
@@ -40,7 +44,6 @@ export const assignTaskService = async (req: Request) => {
   const inputedData = { ...value };
 
   //  verify if the task exists
-
   const task = await taskRepository.retriveSingleTaskById(inputedData.taskId);
 
   if (!task) {
@@ -63,6 +66,32 @@ export const assignTaskService = async (req: Request) => {
     );
   }
 
-
   await taskRepository.assignTask(inputedData.assigneeId, inputedData.taskId);
+};
+
+export const modifyTaskStatusService = async (req: Request) => {
+  const { userId } = req.params;
+  const { status } = req.body;
+  // const { error, value } = validateModifyTaskStatusEntry(status);
+
+  // if (error) {
+  //   const errorMessages = error.details.map(
+  //     (err) => err.message
+  //   );
+  //   return newError(errorMessages[0], HttpStatus.FORBIDDEN);
+  // }
+
+  const statusCode: string[] = ["to-do", "in-progress", "completed"];
+
+  const task = await taskRepository.retriveSingleTaskByUserId(userId);
+
+  if (!task) return newError("Task does not exist", HttpStatus.NOT_FOUND);
+
+  if (task.status === statusCode[status])
+    return newError(
+      `The Status of this task is already ${statusCode[status]}`,
+      HttpStatus.CONFLICT
+    );
+
+  await taskRepository.modifyTaskStatus(statusCode[status], userId);
 };
