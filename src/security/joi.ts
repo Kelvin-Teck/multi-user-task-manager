@@ -1,5 +1,5 @@
 import Joi, { ValidationResult } from "joi";
-import {  UserSignInInput, UserSinUpInput } from "@interfaces";
+import { UserSignInInput, UserSinUpInput } from "@interfaces";
 
 // Define the user schema with TypeScript types
 const userSchema = Joi.object({
@@ -32,7 +32,13 @@ const userSchema = Joi.object({
       "string.pattern.base": "Phone number must contain only numeric digits.",
       "any.required": "Phone number is required.",
     }),
-
+  role: Joi.string()
+    .valid("admin", "user")
+    .optional()
+    .default("user")
+    .messages({
+      "any.only": "Role must be either 'admin' or 'user'",
+    }),
   password: Joi.string().min(8).required().messages({
     "string.min": "Password should be at least 8 characters long",
     "any.required": "Password is required",
@@ -52,11 +58,20 @@ const signInSchema = Joi.object({
 });
 
 // Reusable validation function with explicit types
-export const validateUserSignUp = (userData: UserSinUpInput): ValidationResult => {
+export const validateUserSignUp = (
+  userData: UserSinUpInput
+): ValidationResult => {
   return userSchema.validate(userData, { abortEarly: false });
 };
 
 export const validateUserSignIn = (
+  userData: UserSignInInput
+): ValidationResult => {
+  return signInSchema.validate(userData, { abortEarly: false });
+};
+
+// Admin validation
+export const validateNewAdminEntry = (
   userData: UserSignInInput
 ): ValidationResult => {
   return signInSchema.validate(userData, { abortEarly: false });

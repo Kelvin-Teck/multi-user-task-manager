@@ -1,11 +1,4 @@
-import {
-  Sequelize,
-  DataTypes,
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
-} from "@sequelize/core";
+import * as core from "@sequelize/core";
 
 import {
   Attribute,
@@ -19,91 +12,91 @@ import { v4 as uuidv4 } from "uuid";
 
 // const sequelize = new Sequelize({ dialect: PostgresDialect });
 
-export default class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
+export default class User extends core.Model<
+  core.InferAttributes<User>,
+  core.InferCreationAttributes<User>
 > {
-  @Attribute(DataTypes.UUIDV4)
+  @Attribute(core.DataTypes.UUIDV4)
   @PrimaryKey
   @Default(() => uuidv4())
   declare id: string;
 
-  @Attribute(DataTypes.STRING)
+  @Attribute(core.DataTypes.STRING)
   @NotNull
   declare firstName: string;
 
-  @Attribute(DataTypes.STRING)
+  @Attribute(core.DataTypes.STRING)
   @NotNull
   declare lastName: string;
 
-  @Attribute(DataTypes.STRING)
+  @Attribute(core.DataTypes.STRING)
   @NotNull
   declare email: string;
 
-  @Attribute(DataTypes.STRING)
+  @Attribute(core.DataTypes.STRING)
   @NotNull
   declare phoneNumber: string;
 
-  @Attribute(DataTypes.ENUM("admin", "user"))
+  @Attribute(core.DataTypes.ENUM("admin", "user"))
   @NotNull
   @Default("user")
-  declare role: "admin" | "user";
+  declare role: core.CreationOptional<string>;
 
-  @Attribute(DataTypes.STRING)
+  @Attribute(core.DataTypes.STRING)
   @NotNull
   declare password: string;
 
-  @Attribute(DataTypes.DATE)
-  @Default(DataTypes.NOW)
+  @Attribute(core.DataTypes.DATE)
+  @Default(core.DataTypes.NOW)
   declare createdAt: Date;
 
-  @Attribute(DataTypes.DATE)
-  @Default(DataTypes.NOW)
+  @Attribute(core.DataTypes.DATE)
+  @Default(core.DataTypes.NOW)
   declare updatedAt: Date;
 
   // Initialize the model
-  static initialize(sequelize: Sequelize) {
+  static initialize(sequelize: core.Sequelize) {
     User.init(
       {
         id: {
-          type: DataTypes.UUID,
-          defaultValue: DataTypes.UUIDV4,
+          type: core.DataTypes.UUID,
+          defaultValue: core.DataTypes.UUIDV4,
           primaryKey: true,
         },
         firstName: {
-          type: DataTypes.STRING,
+          type: core.DataTypes.STRING,
           allowNull: false,
         },
         lastName: {
-          type: DataTypes.STRING,
+          type: core.DataTypes.STRING,
           allowNull: false,
         },
         email: {
-          type: DataTypes.STRING,
+          type: core.DataTypes.STRING,
           allowNull: false,
         },
         phoneNumber: {
-          type: DataTypes.STRING,
+          type: core.DataTypes.STRING,
           allowNull: false,
         },
         role: {
-          type: DataTypes.ENUM("admin", "user"),
+          type: core.DataTypes.ENUM("admin", "user"),
           allowNull: false,
           defaultValue: 'user'
         },
 
         password: {
-          type: DataTypes.STRING,
+          type: core.DataTypes.STRING,
           allowNull: false,
         },
         createdAt: {
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
+          type: core.DataTypes.DATE,
+          defaultValue: core.DataTypes.NOW,
           allowNull: false,
         },
         updatedAt: {
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
+          type: core.DataTypes.DATE,
+          defaultValue: core.DataTypes.NOW,
           allowNull: false,
         },
       },

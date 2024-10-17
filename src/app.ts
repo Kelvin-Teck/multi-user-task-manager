@@ -1,6 +1,7 @@
 import express from "express";
 import { Request, Response } from "express";
 import authRoute from '@routes/authRoute'
+import adminRoute from '@routes/admin/admin-user.route'
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 /* routes middleware Initialization*/
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/admin", adminRoute);
 
 // This is middleware to Check the Status of the Server
 app.use("/", (req: Request, res: Response) => {

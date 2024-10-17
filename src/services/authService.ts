@@ -12,14 +12,16 @@ export const createUserService = async (req: Request) => {
     lastName,
     email,
     phoneNumber,
+    role: req.body.role || "user",
     password,
   };
 
   const { error, value } = validateUserSignUp(data);
 
   if (error) {
-    const errorMessages = error.details.map((err: { message: any; } ) => err.message);
-
+    const errorMessages = error.details.map(
+      (err: { message: any }) => err.message
+    );
     return newError(errorMessages[0], HttpStatus.FORBIDDEN);
   }
 
@@ -57,13 +59,14 @@ export const loginUserService = async (req: Request, res: Response) => {
   const { error, value } = validateUserSignIn(data);
 
   if (error) {
-    const errorMessages = error.details.map((err: { message: any; }) => err.message);
+    const errorMessages = error.details.map(
+      (err: { message: any }) => err.message
+    );
     return newError(errorMessages[0], HttpStatus.FORBIDDEN);
   }
 
   const inputedData = { ...value };
   const userInfo = await userRepository.getSingleUserByEmail(inputedData.email);
-
 
   if (userInfo) {
     // check validity of password
@@ -75,7 +78,11 @@ export const loginUserService = async (req: Request, res: Response) => {
     if (!isPasswordValid)
       return newError("Incorrect Credentials Provided", HttpStatus.FORBIDDEN);
 
-    const tokenPayload = { id: userInfo.id, email: userInfo.email, role: userInfo.role };
+    const tokenPayload = {
+      id: userInfo.id,
+      email: userInfo.email,
+      role: userInfo.role,
+    };
     const accessToken = createAccessToken(tokenPayload);
 
     res.cookie("accessToken", accessToken, {
@@ -95,8 +102,6 @@ export const loginUserService = async (req: Request, res: Response) => {
     });
 
     const { password, ...safeuserData } = userInfo.get();
-
-    
 
     const formatedResponse = { token: accessToken, user: safeuserData };
 

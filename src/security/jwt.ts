@@ -28,19 +28,19 @@ export const createRefreshToken = async (payload: JwtSignPayload) => {
   return refreshToken
 };
 
-export const verifyAccessToken = async (token: string): Promise<boolean> => {
+export const verifyAccessToken = async (token: string) => {
   try {
     // Verify the token using the secret key
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as CustomJwtPayload  ;
-    console.log(decoded);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) ;
+    
     //  checking the token's expiration
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    if (decoded.exp && decoded.exp < currentTime) {
-      return false; // Token has expired
-    }
+    // const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    // if (decoded.exp && decoded.exp < currentTime) {
+    //   return false; // Token has expired
+    // }
 
     // If verification is successful, return true
-    return true;
+    return decoded;
   } catch (error) {
     // Log error details for debugging
     console.error("Token verification failed:", error);

@@ -32,4 +32,5 @@ export interface JwtSignPayload {
 
 export interface CustomJwtPayload extends JwtPayload {
   exp?: number;
+  role: 'admin' | 'user'
 }
