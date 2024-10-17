@@ -1,5 +1,5 @@
 import { comparePassword, hashPassword } from "@security/bcrypt";
-import { validateUser, validateUserSignIn } from "@security/joi";
+import { validateUserSignUp, validateUserSignIn } from "@security/joi";
 import { Request, Response } from "express";
 import { userRepository } from "@repositories";
 import { HttpStatus, newError } from "@utils";
@@ -15,7 +15,7 @@ export const createUserService = async (req: Request) => {
     password,
   };
 
-  const { error, value } = validateUser(data);
+  const { error, value } = validateUserSignUp(data);
 
   if (error) {
     const errorMessages = error.details.map((err: { message: any; } ) => err.message);
@@ -64,9 +64,9 @@ export const loginUserService = async (req: Request, res: Response) => {
   const inputedData = { ...value };
   const userInfo = await userRepository.getSingleUserByEmail(inputedData.email);
 
+
   if (userInfo) {
     // check validity of password
-
     const isPasswordValid = await comparePassword(
       inputedData.password,
       userInfo.password
@@ -75,8 +75,8 @@ export const loginUserService = async (req: Request, res: Response) => {
     if (!isPasswordValid)
       return newError("Incorrect Credentials Provided", HttpStatus.FORBIDDEN);
 
-    const tokenPayload = { id: userInfo.id, email: userInfo.email };
-    const accessToken = await createAccessToken(tokenPayload);
+    const tokenPayload = { id: userInfo.id, email: userInfo.email, role: userInfo.role };
+    const accessToken = createAccessToken(tokenPayload);
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
@@ -94,7 +94,9 @@ export const loginUserService = async (req: Request, res: Response) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    const { password, ...safeuserData } = userInfo.dataValues;
+    const { password, ...safeuserData } = userInfo.get();
+
+    
 
     const formatedResponse = { token: accessToken, user: safeuserData };
 

@@ -1,5 +1,5 @@
 import Joi, { ValidationResult } from "joi";
-import { UserInput, UserSignInInput } from "@interfaces";
+import {  UserSignInInput, UserSinUpInput } from "@interfaces";
 
 // Define the user schema with TypeScript types
 const userSchema = Joi.object({
@@ -52,7 +52,7 @@ const signInSchema = Joi.object({
 });
 
 // Reusable validation function with explicit types
-export const validateUser = (userData: UserInput): ValidationResult => {
+export const validateUserSignUp = (userData: UserSinUpInput): ValidationResult => {
   return userSchema.validate(userData, { abortEarly: false });
 };
 

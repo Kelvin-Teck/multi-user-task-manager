@@ -1,19 +1,35 @@
-export interface UserInput {
-  [x: string]: any;
+import { JwtPayload } from "jsonwebtoken";
+
+
+export interface UserInterface {
+  readonly id: string;
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber: string;
   password: string;
-  role?: string
+  role: 'admin' | 'user'
 }
+export interface UserSinUpInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+}
+
 
 export interface UserSignInInput {
   email: string;
   password: string;
 }
 
-export interface JwtPayload {
+export interface JwtSignPayload {
   id: string;
   email: string;
+  role: string;
+}
+
+export interface CustomJwtPayload extends JwtPayload {
+  exp?: number;
 }

@@ -1,6 +1,6 @@
 import express from 'express';
 import {createUserController, loginUserController} from '../controllers/AuthController'
-import { createRateLimiter } from '@middlewares/auth.middleware';
+import { createRateLimiter } from '@middlewares/authMiddleware';
 const router = express.Router();
 
 router.post('/register', createUserController);
