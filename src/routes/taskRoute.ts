@@ -1,12 +1,9 @@
-// import express from "express";
-// import {
-//   createUserController,
-//   loginUserController,
-// } from "../controllers/AuthController";
-// import { createRateLimiter } from "@middlewares/authMiddleware";
-// const router = express.Router();
+import { assignTaskController, createTaskController } from "@controllers/TaskConttroller";
+import { AuthGuard } from "@middlewares/authMiddleware";
+import express from "express";
+const router = express.Router();
 
-// router.post("/register", createUserController);
-// router.post("/login", [createRateLimiter(5, 2)], loginUserController);
+router.post("/create-task/:userId", [AuthGuard], createTaskController);
+router.patch("/assign-task", [AuthGuard], assignTaskController);
 
-// export default router;
+export default router;

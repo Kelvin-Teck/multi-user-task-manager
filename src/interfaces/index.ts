@@ -34,3 +34,17 @@ export interface CustomJwtPayload extends JwtPayload {
   exp?: number;
   role: 'admin' | 'user'
 }
+
+export interface TaskInterface {
+  readonly id?: string;
+  title: string;
+  description: string;
+  dueDate: string;
+  status?: 'to-do' | 'in-progress' | 'completed';
+  userId?: string;
+}
+
+export interface TaskAssignmentInterface{
+  taskId: string;
+  assigneeId: string;
+}

@@ -4,8 +4,9 @@ import type { Migration } from "../umzug";
 export const up: Migration = async ({ context: { queryInterface } }) => {
   await queryInterface.createTable("Users", {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       primaryKey: true,
+      allowNull: false
     },
     firstName: {
       type: DataTypes.STRING,

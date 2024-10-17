@@ -14,8 +14,6 @@ export const getSingleUserByEmail = async (email: string): Promise<any | null > 
     return userInfo;
 }
 
-
-
 export const getSingleUserByPhoneNumber = async (
   phoneNumber: string
 ): Promise<any | null> => {
@@ -23,3 +21,9 @@ export const getSingleUserByPhoneNumber = async (
 
   return userInfo;
 };
+
+export const retriveSingleUserById = async (assigneeId: string): Promise<User | null> => {
+  const userInfo = await db.User.findByPk(assigneeId);
+
+  return userInfo;
+}

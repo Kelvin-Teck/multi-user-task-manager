@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 4000;
 const startApp = async () => {
   try {
     app.listen(PORT, async () => {
+      
       await sequelize.authenticate();
 
       console.log(

@@ -1,5 +1,5 @@
 import Joi, { ValidationResult } from "joi";
-import { UserSignInInput, UserSinUpInput } from "@interfaces";
+import { TaskAssignmentInterface, TaskInterface, UserSignInInput, UserSinUpInput } from "@interfaces";
 
 // Define the user schema with TypeScript types
 const userSchema = Joi.object({
@@ -45,7 +45,7 @@ const userSchema = Joi.object({
   }),
 });
 
-// Define the user schema with TypeScript types
+// Define the signIn schema with TypeScript types
 const signInSchema = Joi.object({
   email: Joi.string().email().required().messages({
     "string.email": "Email must be a valid email address",
@@ -57,7 +57,63 @@ const signInSchema = Joi.object({
   }),
 });
 
+// Define Task Schema
+const taskSchema = Joi.object({
+  title: Joi.string().required().min(1).max(255).messages({
+    "string.empty": "Title cannot be empty",
+    "string.min": "Title must be at least 1 character long",
+    "string.max": "Title must be less than or equal to 255 characters",
+    "any.required": "Title is required",
+  }),
+
+  description: Joi.string().optional().allow("").max(1000).messages({
+    "string.max": "Description must be less than or equal to 1000 characters",
+  }),
+
+  dueDate: Joi.date().optional().messages({
+    "date.base": "Due date must be a valid date",
+  }),
+
+  status: Joi.string()
+    .valid("to-do", "in-progress", "completed")
+    .default("to-do") // Set default value if not provided
+    .messages({
+      "any.only":
+        "Status must be one of the following: to-do, in-progress, completed",
+    }),
+
+  userId: Joi.string()
+    .guid({ version: ["uuidv4"] }) // Validate as UUID v4
+    .required()
+    .messages({
+      "string.guid": "User ID must be a valid UUID",
+      "any.required": "User ID is required",
+    }),
+});
+
+
+// assign Task Schema
+export const assignTaskValidationSchema = Joi.object({
+  taskId: Joi.string()
+    .guid({ version: ["uuidv4"] })
+    .required()
+    .messages({
+      "string.empty": "Task ID is required",
+      "string.guid": "Task ID must be a valid UUID",
+    }),
+
+  assigneeId: Joi.string()
+    .guid({ version: ["uuidv4"] })
+    .required()
+    .messages({
+      "string.empty": "Assignee ID is required",
+      "string.guid": "Assignee ID must be a valid UUID",
+    }),
+});
+
 // Reusable validation function with explicit types
+
+// Users Validation
 export const validateUserSignUp = (
   userData: UserSinUpInput
 ): ValidationResult => {
@@ -68,6 +124,21 @@ export const validateUserSignIn = (
   userData: UserSignInInput
 ): ValidationResult => {
   return signInSchema.validate(userData, { abortEarly: false });
+};
+
+//Task Validations
+
+export const validateTaskInput = (
+  userData: TaskInterface
+): ValidationResult => {
+  return taskSchema.validate(userData, { abortEarly: false });
+};
+
+
+export const validateTaskAssignmentInput = (
+  userData: TaskAssignmentInterface
+): ValidationResult => {
+  return assignTaskValidationSchema.validate(userData, { abortEarly: false });
 };
 
 // Admin validation
