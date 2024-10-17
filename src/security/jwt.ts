@@ -1,7 +1,7 @@
 import { CustomJwtPayload, JwtSignPayload } from "@interfaces";
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcryptjs'
-import { newError } from "@utils";
+import { HttpStatus, newError } from "@utils";
 
 export const createAccessToken = (payload: JwtSignPayload) => {
   const accessToken = jwt.sign(
@@ -29,21 +29,16 @@ export const createRefreshToken = async (payload: JwtSignPayload) => {
 };
 
 export const verifyAccessToken = async (token: string) => {
-  try {
     // Verify the token using the secret key
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) ;
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as CustomJwtPayload ;
     
     //  checking the token's expiration
-    // const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    // if (decoded.exp && decoded.exp < currentTime) {
-    //   return false; // Token has expired
-    // }
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    if (decoded.exp && decoded.exp < currentTime) {
+      return newError('Token has Expired', HttpStatus.FORBIDDEN); // Token has expired
+    }
 
     // If verification is successful, return true
     return decoded;
-  } catch (error) {
-    // Log error details for debugging
-    console.error("Token verification failed:", error);
-    return false; // Token is invalid or verification failed
-  }
+
 };

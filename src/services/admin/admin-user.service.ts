@@ -20,7 +20,7 @@ export const createAdminService = async (req: Request) => {
   const inputedData = { ...value };
   const userInfo = await userRepository.getSingleUserByEmail(inputedData.email);
 
-  if (userInfo) return newError("This User also exists", HttpStatus.CONFLICT);
+  if (userInfo) return newError("This User already Exists", HttpStatus.CONFLICT);
 
   const hashedPassword = await hashPassword(inputedData.password);
 

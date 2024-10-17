@@ -1,6 +1,6 @@
 import rateLimit from "express-rate-limit";
 import { Request, Response, NextFunction } from "express";
-import { HttpStatus, newError } from "@utils";
+import { HttpStatus, newError, sendError } from "@utils";
 import { verifyAccessToken } from "@security/jwt";
 
 // Function to create and return a rate limiter middleware
@@ -23,29 +23,44 @@ export const createRateLimiter = (
   });
 };
 
-export const AuthGuard = async (req: Request, res:Response, next:NextFunction) => {
-  const authorization = req.headers["authorization"];
+export const AuthGuard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<any> => {
+  try {
+    const authorization = req.headers["authorization"];
 
-  if (!authorization)
-    return newError("No Authorization Header Provided", HttpStatus.UNAUTHORIZED);
+    if (!authorization)
+      return newError(
+        "No Authorization Header Provided",
+        HttpStatus.UNAUTHORIZED
+      );
 
-  const token = authorization.split(" ")[1];
+    const token = authorization.split(" ")[1];
 
-  if (!token) return newError('No Token Provided', HttpStatus.FORBIDDEN);
+    if (!token) return newError("No Token Provided", HttpStatus.FORBIDDEN);
 
-  const decoded = await verifyAccessToken(token);
-  
-  if (!decoded) return newError('Token has Expired', HttpStatus.UNAUTHORIZED);
-  req.user = decoded;
+    const decoded = await verifyAccessToken(token);
 
-  next();
+    if (!decoded) return newError("Token has Expired", HttpStatus.UNAUTHORIZED);
+
+    req.user = decoded;
+
+    next();
+  } catch (error: any) {
+    return res.status(HttpStatus.FORBIDDEN).json(sendError(`Invalid Token ----- ${error.message}`, HttpStatus.FORBIDDEN));
+  }
 };
 
-
-export const AdminGuard = async (req: Request, res: Response, next: NextFunction) => {
-   if (req.user && typeof req.user !== "string" && req.user.role === "admin") {
-     return next();
-   } else {
-     return newError( "Access denied, Admins only" , HttpStatus.FORBIDDEN);
-   }
-}
+export const AdminGuard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user && typeof req.user !== "string" && req.user.role === "admin") {
+    return next();
+  } else {
+    return newError("Access denied, Admins only", HttpStatus.FORBIDDEN);
+  }
+};
