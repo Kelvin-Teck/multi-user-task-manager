@@ -36,7 +36,7 @@ bash
 </pre>
 
 3. Install Dependencies
-Using npm
+   Using npm
 
 <pre> ```bash # Install dependencies 
      
@@ -58,9 +58,39 @@ Using npm
 <pre>
 
 # Example of .env file
-PORT=3000
-EMAIL_USER=your-email@example.com
-EMAIL_PASS=your-email-password
-EMAIL_HOST=smtp.example.com
+
+# App
+
+NODE_ENV=development
+PORT=2000
+
+# Urls
+
+LIVE_ORIGIN=
+DEV_ORIGIN=http://localhost:
+
+# DATABASE Development
+
+DEV_DATABASE_NAME=database_name
+DEV_DATABASE_HOST=127.0.0.1
+DEV_DATABASE_USER=database_user
+DEV_DATABASE_PASSWORD=your_password
+DEV_DATABASE_TYPE=postgres
+DEV_DATABASE_PORT=5432
+
+#Mailing
+EMAIL_SERVICE=gmail
+EMAIL_HOST=gmail
 EMAIL_PORT=587
+EMAIL_PASS=syag cyey haek uyoj #generated from Google App Password
+EMAIL_USER=your_email_address
+EMAIL_SENDER=
+
+# Auth
+
+ACCESS_TOKEN_SECRET=\_your_access_token_secret
+ACCESS_TOKEN_EXP=15m
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+REFRESH_TOKEN_EXP=10d
+
 </pre>
