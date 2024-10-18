@@ -11,4 +11,4 @@ export const HttpStatus = {
   UNPROCESSABLE: 422,
   TOO_MANY_REQUESTS: 429,
   INTERNAL_SERVER_ERROR: 500,
-};
+};//Http Status Codes

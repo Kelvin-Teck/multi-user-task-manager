@@ -9,7 +9,7 @@ export const createUserController = async (
   next: NextFunction
 ): Promise<any> => {
   try {
-    const response = await createUserService(req);
+    const response = await createUserService(req);//Response From Service
 
     res
       .status(HttpStatus.CREATED)
@@ -34,7 +34,7 @@ export const loginUserController = async (
   res: Response
 ): Promise<any> => {
   try {
-    const response = await loginUserService(req, res);
+    const response = await loginUserService(req, res);//Response From Service
     return res
       .status(HttpStatus.OK)
       .json(sendSuccess("User Successfuly Signed In", response));

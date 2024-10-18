@@ -37,17 +37,17 @@ export const AuthGuard = async (
         HttpStatus.UNAUTHORIZED
       );
 
-    const token = authorization.split(" ")[1];
+    const token = authorization.split(" ")[1]; //Bearer XXXXXXXXXXXXXXXXXXX
 
-    if (!token) return newError("No Token Provided", HttpStatus.FORBIDDEN);
+    if (!token) return newError("No Token Provided", HttpStatus.FORBIDDEN);//returns error if no Token Provided
 
-    const decoded = await verifyAccessToken(token);
+    const decoded = await verifyAccessToken(token);//Return users endoded/encrypted data
 
-    if (!decoded) return newError("Token has Expired", HttpStatus.UNAUTHORIZED);
+    if (!decoded) return newError("Token has Expired", HttpStatus.UNAUTHORIZED);//Returns Error at Failure to decrypt
 
-    req.user = decoded;
+    req.user = decoded;//Store decoded data to the request handler
 
-    next();
+    next();//move To the next middleware
   } catch (error: any) {
     return res
       .status(HttpStatus.FORBIDDEN)
@@ -66,7 +66,7 @@ export const AdminGuard = async (
   next: NextFunction
 ) => {
   if (req.user && typeof req.user !== "string" && req.user.role === "admin") {
-    return next();
+    return next();//Move To the next middleware
   } else {
     return newError("Access denied, Admins only", HttpStatus.FORBIDDEN);
   }

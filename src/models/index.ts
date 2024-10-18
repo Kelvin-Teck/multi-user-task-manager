@@ -9,7 +9,7 @@ export const models = {
   Task: Task,
   Comment: Comment,
   Notification: Notification
-};
+};//Objects Holding Model
 
 const db = { ...models };
 

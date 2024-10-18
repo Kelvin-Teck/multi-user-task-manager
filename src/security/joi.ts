@@ -9,7 +9,7 @@ import {
   UserSinUpInput,
 } from "@interfaces";
 
-// Define the user schema with TypeScript types
+// Define the user schema 
 const userSchema = Joi.object({
   firstName: Joi.string().min(3).max(30).required().messages({
     "string.base": "Name should be a string",
@@ -53,7 +53,7 @@ const userSchema = Joi.object({
   }),
 });
 
-// Define the signIn schema with TypeScript types
+// Define the signIn schema 
 const signInSchema = Joi.object({
   email: Joi.string().email().required().messages({
     "string.email": "Email must be a valid email address",
@@ -127,19 +127,22 @@ export const assignTaskValidationSchema = Joi.object({
     }),
 });
 
+//status Modification Schema
 export const modifyTaskStatusSchema = Joi.object({
   status: Joi.number().required(),
 });
 
+// 
 export const filterTasksByTagSchema = Joi.object({
   tagName: Joi.string().valid("urgent", "bug", "feature").required(),
 });
 
+// comment Validation Schema
 export const commentValidationSchema = Joi.object({
   comment: Joi.string().required().min(1).max(1000),
 });
 
-// Reusable validation function with explicit types
+/* Reusable validation function */
 
 // Users Validation
 export const validateUserSignUp = (

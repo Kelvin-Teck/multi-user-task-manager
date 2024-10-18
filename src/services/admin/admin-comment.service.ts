@@ -3,8 +3,8 @@ import { HttpStatus, newError } from "@utils";
 import { Request } from "express";
 
 export const deleteCommentAdminService = async (req: Request) => {
-  // Fetching logged In User
-  const userRole = typeof req.user === "object" ? req.user.role : null;
+  
+  const userRole = typeof req.user === "object" ? req.user.role : null;//Logged in user's role
 
   if (userRole !== "admin")
     return newError(
@@ -14,6 +14,7 @@ export const deleteCommentAdminService = async (req: Request) => {
 
   const { commentId } = req.params;
 
+// check if comment exists
   const existingComment = await commentRespository.retrieveSingleCommentById(
     commentId
   );
@@ -22,5 +23,5 @@ export const deleteCommentAdminService = async (req: Request) => {
     return newError("This comment does not exist", HttpStatus.NOT_FOUND);
   }
 
-  await commentRespository.deleteCommentById(commentId);
+  await commentRespository.deleteCommentById(commentId);//delete Comment
 };

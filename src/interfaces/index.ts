@@ -60,3 +60,9 @@ export interface FilterTasksByTagInterface {
 export interface TaskCommentInterface {
   comment: string;
 }
+
+export interface TaskFilterQuery {
+  tag?: string | undefined;
+  sortBy?: string | undefined;
+  dueDate?:string
+}

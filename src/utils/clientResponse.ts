@@ -1,5 +1,8 @@
 import { CustomError } from "@errors/customError";
 
+
+/*Helper Functions For Sending Response To the Client*/
+ 
 export const sendError = (
   message: string,
   code: number

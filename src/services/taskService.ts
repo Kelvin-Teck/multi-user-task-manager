@@ -16,8 +16,8 @@ import { HttpStatus, newError } from "@utils";
 import { Request } from "express";
 
 export const createTaskService = async (req: Request) => {
-  const { userId } = req.params;
-  const { title, description, dueDate } = req.body;
+  const { userId } = req.params; //params
+  const { title, description, dueDate } = req.body; //user Input
 
   const data = {
     title,
@@ -27,6 +27,8 @@ export const createTaskService = async (req: Request) => {
     status: req.body.status,
     tag: req.body.tag,
   };
+
+  // validate user input
   const { error, value } = validateTaskInput(data);
 
   if (error) {
@@ -47,16 +49,17 @@ export const createTaskService = async (req: Request) => {
       HttpStatus.CONFLICT
     );
 
-  await taskRepository.createTask(inputedData);
+  await taskRepository.createTask(inputedData); //create Task
 };
 
 export const assignTaskService = async (req: Request) => {
   // Fetching logged In User
-  const loggedInUserId = typeof req.user === "object" ? req.user.id : null;
-  const { taskId, assigneeId } = req.body;
+  const loggedInUserId = typeof req.user === "object" ? req.user.id : null; //logged in user Id
+  const { taskId, assigneeId } = req.body; //user input
 
   const data = { taskId, assigneeId };
 
+  // validate User input
   const { error, value } = validateTaskAssignmentInput(data);
 
   if (error) {
@@ -91,9 +94,9 @@ export const assignTaskService = async (req: Request) => {
     );
   }
 
-  await taskRepository.assignTask(inputedData.assigneeId, inputedData.taskId);
+  await taskRepository.assignTask(inputedData.assigneeId, inputedData.taskId); //assign task to a user
 
-  const assigner = await userRepository.retriveSingleUserById(loggedInUserId);
+  const assigner = await userRepository.retriveSingleUserById(loggedInUserId); //Task Assigner data
 
   const notificationData = {
     userId: assigneeId,
@@ -101,7 +104,7 @@ export const assignTaskService = async (req: Request) => {
     message: `You have been assigned a task by ${assigner?.firstName} ${assigner?.lastName} `,
   };
 
-  await notificationRepository.createNotification(notificationData);
+  await notificationRepository.createNotification(notificationData); //create notification
   /*Send Out a Notificatin E-mail */
   //  const mailOptions = {
   //     from: 'your-email@gmail.com',
@@ -120,6 +123,7 @@ export const modifyTaskStatusService = async (req: Request) => {
   const { userId } = req.params;
   const { status } = req.body;
 
+  // Validate user input
   const { error, value } = validateModifyTaskStatusEntry({ status });
 
   if (error) {
@@ -127,7 +131,7 @@ export const modifyTaskStatusService = async (req: Request) => {
     return newError(errorMessages[0], HttpStatus.FORBIDDEN);
   }
 
-  const statusCode: string[] = ["to-do", "in-progress", "completed"];
+  const statusCode: string[] = ["to-do", "in-progress", "completed"]; //possible status data 0,1,2
 
   const task = await taskRepository.retriveSingleTaskByUserId(userId);
 
@@ -146,25 +150,20 @@ export const modifyTaskStatusService = async (req: Request) => {
       HttpStatus.CONFLICT
     );
 
-  await taskRepository.modifyTaskStatus(statusCode[status], userId);
+  await taskRepository.modifyTaskStatus(statusCode[status], userId); //modify Task Status
 };
 
-export const retrieveFilteredTasksByTagService = async (req: Request) => {
-  const tagName = req.query.tagName as string | undefined;
-  const data = { tagName };
+export const retrieveTasksService = async (req: Request) => {
+  const { tag, status, sortBy, order } = req.query; //query filters
+  const sort = { field: sortBy, order }; //sorting data
+  const filter = { tag, status, sort }; //filter data
 
-  const { error, value } = validateFilterTasksByTagEntry(data);
-
-  if (error) {
-    const errorMessages = error.details.map(
-      (err: { message: any }) => err.message
-    );
-    return newError(errorMessages[0], HttpStatus.FORBIDDEN);
-  }
-
-  const tasks = await taskRepository.retrieveAllTasksByTag(value);
+  const tasks = await taskRepository.retrieveAllTasks(filter);
   if (tasks?.length === 0) {
-    return newError("No Task(s) exist with these tag", HttpStatus.NOT_FOUND);
+    return newError(
+      "No Task(s) exist with these specified filter parameter",
+      HttpStatus.NOT_FOUND
+    );
   }
 
   return tasks;
@@ -173,10 +172,11 @@ export const retrieveFilteredTasksByTagService = async (req: Request) => {
 export const addCommentToTaskService = async (req: Request) => {
   const loggedInUserId = typeof req.user === "object" ? req.user.id : ""; //Fetching Logged in user
 
-  const { taskId } = req.params;
+  const { taskId } = req.params; //params
 
-  const { comment } = req.body;
+  const { comment } = req.body; //user Input
 
+  // validate input
   const { error, value } = validateTaskComment({ comment });
 
   if (error) {
@@ -186,5 +186,5 @@ export const addCommentToTaskService = async (req: Request) => {
 
   const data = { comment: value.comment, taskId, userId: loggedInUserId };
 
-  await commentRespository.createComment(data);
+  await commentRespository.createComment(data); //create comment
 };

@@ -7,7 +7,7 @@ export const editCommentController = async (
   res: Response
 ): Promise<any> => {
   try {
-    const response = await editCommentService(req);
+    const response = await editCommentService(req);//Response From Service
 
     res
       .status(HttpStatus.CREATED)
@@ -30,7 +30,7 @@ export const deleteCommentController = async (
   res: Response
 ): Promise<any> => {
   try {
-    const response = await deleteCommentService(req);
+    const response = await deleteCommentService(req);//Response From Service
 
     res
       .status(HttpStatus.CREATED)

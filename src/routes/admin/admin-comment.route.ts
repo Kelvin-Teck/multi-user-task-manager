@@ -5,7 +5,7 @@ import { deleteCommentAdminController } from "@controllers/admin/admin-comment.c
 
 const router = express.Router();
 
-router.delete("/delete/:commentId", [AuthGuard, AdminGuard], deleteCommentAdminController);
+router.delete("/delete/:commentId", [AuthGuard, AdminGuard], deleteCommentAdminController);//comment deletion Route for Admin
 
 
 export default router;

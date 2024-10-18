@@ -6,7 +6,7 @@ import { HttpStatus, newError } from "@utils";
 import { createAccessToken, createRefreshToken } from "@security/jwt";
 
 export const createUserService = async (req: Request) => {
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  const { firstName, lastName, email, phoneNumber, password } = req.body; //User Input
   const data = {
     firstName,
     lastName,
@@ -16,6 +16,7 @@ export const createUserService = async (req: Request) => {
     password,
   };
 
+  // Validate User Input
   const { error, value } = validateUserSignUp(data);
 
   if (error) {
@@ -25,9 +26,12 @@ export const createUserService = async (req: Request) => {
     return newError(errorMessages[0], HttpStatus.FORBIDDEN);
   }
 
+  // get user info by email
   const userInfoByEmail = await userRepository.getSingleUserByEmail(
     value.email
   );
+
+  // get user info by phone
   const userInfoByPhoneNumber = await userRepository.getSingleUserByPhoneNumber(
     value.phoneNumber
   );
@@ -46,16 +50,18 @@ export const createUserService = async (req: Request) => {
     );
   }
 
-  const hashedPassword = await hashPassword(password);
+  const hashedPassword = await hashPassword(password);//encrypt password
 
   const newUserData = { ...value, password: hashedPassword };
 
-  await userRepository.createUser(newUserData);
+  await userRepository.createUser(newUserData);//create a new user
 };
 
 export const loginUserService = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body;//user Input
   const data = { email, password };
+
+  //validate user Input
   const { error, value } = validateUserSignIn(data);
 
   if (error) {
@@ -66,7 +72,7 @@ export const loginUserService = async (req: Request, res: Response) => {
   }
 
   const inputedData = { ...value };
-  const userInfo = await userRepository.getSingleUserByEmail(inputedData.email);
+  const userInfo = await userRepository.getSingleUserByEmail(inputedData.email);//fetch user 
 
   if (userInfo) {
     // check validity of password
@@ -83,7 +89,8 @@ export const loginUserService = async (req: Request, res: Response) => {
       email: userInfo.email,
       role: userInfo.role,
     };
-    const accessToken = createAccessToken(tokenPayload);
+
+    const accessToken = createAccessToken(tokenPayload);//generate access token
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
@@ -92,7 +99,7 @@ export const loginUserService = async (req: Request, res: Response) => {
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
-    const refreshToken = await createRefreshToken(tokenPayload);
+    const refreshToken = await createRefreshToken(tokenPayload);//generate refresh token
     // Send refresh token in an HTTP-only cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -105,7 +112,7 @@ export const loginUserService = async (req: Request, res: Response) => {
 
     const formatedResponse = { token: accessToken, user: safeuserData };
 
-    return formatedResponse;
+    return formatedResponse;//return response to client
   } else {
     return newError("No User with these Credentials", HttpStatus.FORBIDDEN);
   }

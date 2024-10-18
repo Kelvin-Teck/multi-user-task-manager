@@ -8,7 +8,7 @@ export const createAdminController = async (
 ): Promise<any> => {
   console.log(req.user);
   try {
-    const response = await createAdminService(req);
+    const response = await createAdminService(req);//Response From Service
 
     res
       .status(HttpStatus.CREATED)

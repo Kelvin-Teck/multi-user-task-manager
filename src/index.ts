@@ -9,7 +9,7 @@ const startApp = async () => {
   try {
     app.listen(PORT, async () => {
       
-      await sequelize.authenticate();
+      await sequelize.authenticate();//initaite connection to DB...
 
       console.log(
         "Connection has been established to the Database successfully."
@@ -21,4 +21,4 @@ const startApp = async () => {
   }
 };
 
-startApp();
+startApp();//App Starter Function

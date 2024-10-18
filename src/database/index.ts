@@ -6,6 +6,7 @@ import User from "@models/user.model";
 import { Sequelize } from "@sequelize/core";
 import { PostgresDialect } from "@sequelize/postgres";
 
+// Sequelize ORM Config
 const sequelize = new Sequelize({
   ...config.database,
   dialect: PostgresDialect,

@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 export const deleteCommentAdminController = async (req: Request, res: Response): Promise<any> => {
       try {
-        const response = await deleteCommentAdminService(req);
+        const response = await deleteCommentAdminService(req);//response  From Service
 
         res
           .status(HttpStatus.CREATED)

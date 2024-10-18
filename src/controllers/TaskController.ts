@@ -3,7 +3,7 @@ import {
   assignTaskService,
   createTaskService,
   modifyTaskStatusService,
-  retrieveFilteredTasksByTagService,
+  retrieveTasksService,
 } from "@services/taskService";
 import { HttpStatus, sendError, sendSuccess } from "@utils";
 import { NextFunction, Request, Response } from "express";
@@ -78,12 +78,12 @@ export const modifyTaskStatusController = async (
   }
 };
 
-export const retriveFilteredTasksByTagController = async (
+export const retrieveTasksController = async (
   req: Request,
   res: Response
 ): Promise<any> => {
   try {
-    const response = await retrieveFilteredTasksByTagService(req);
+    const response = await retrieveTasksService(req); //Response From Service
 
     res
       .status(HttpStatus.CREATED)
@@ -106,7 +106,7 @@ export const addCommentToTaskController = async (
   res: Response
 ): Promise<any> => {
   try {
-    const response = await addCommentToTaskService(req);
+    const response = await addCommentToTaskService(req); //Response From Service
 
     res
       .status(HttpStatus.CREATED)
