@@ -137,3 +137,12 @@ bash
 
 $ yarn run dev
 </pre>
+
+7. Access the app
+   Once the server is running, you can access the app at:
+
+<pre> 
+bash
+
+http://localhost:<your_port_env>
+</pre>
