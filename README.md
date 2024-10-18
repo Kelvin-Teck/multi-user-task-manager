@@ -11,7 +11,7 @@ This is a Basic Multi User Task manager backend Service
 
 1. Clone the Repo
 
-<pre>```bash # git clone https://github.com/Kelvin-Teck/multi-user-task-manager.git ```</pre>
+<pre> ```bash $ git clone https://github.com/Kelvin-Teck/multi-user-task-manager.git ``` </pre>
 
 2. Install Dependencies
 
