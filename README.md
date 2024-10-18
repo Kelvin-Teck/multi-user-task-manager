@@ -100,6 +100,8 @@ REFRESH_TOKEN_EXP=10d
    Using npm:
 
 <pre>
+bash
+
 $npm run migration up
 
 </pre>
@@ -107,6 +109,8 @@ $npm run migration up
 Using yarn:
 
 <pre>
+bash
+
 yarn run migration up
 </pre>
 
@@ -115,11 +119,15 @@ yarn run migration up
 Using npm:
 
 <pre>
+bash
+
 $ npm run dev
 </pre>
 
 Using yarn:
 
 <pre>
+bash
+
 $ yarn run dev
 </pre>
