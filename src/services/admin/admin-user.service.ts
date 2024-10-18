@@ -35,3 +35,4 @@ export const createAdminService = async (req: Request) => {
 
   await userRepository.createUser(newAdmin);
 };
+
