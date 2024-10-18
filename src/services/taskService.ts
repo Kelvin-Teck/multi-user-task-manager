@@ -1,4 +1,8 @@
-import { commentRespository, taskRepository, userRepository } from "@repositories";
+import {
+  commentRespository,
+  taskRepository,
+  userRepository,
+} from "@repositories";
 import { retriveSingleTaskById } from "@repositories/taskRepository";
 import {
   validateFilterTasksByTagEntry,
@@ -32,6 +36,15 @@ export const createTaskService = async (req: Request) => {
   }
 
   const inputedData = { ...value };
+
+  const existingTask =
+    await taskRepository.retrieveTaskSingleByTitleAndDescription(inputedData);
+
+  if (existingTask)
+    return newError(
+      "A task with this title and description already exixt.",
+      HttpStatus.CONFLICT
+    );
 
   await taskRepository.createTask(inputedData);
 };
@@ -79,17 +92,17 @@ export const assignTaskService = async (req: Request) => {
 };
 
 export const modifyTaskStatusService = async (req: Request) => {
+  const loggedInUserId = typeof req.user === "object" ? req.user.id : ""; //Fetching Logged in user
+
   const { userId } = req.params;
   const { status } = req.body;
 
-  // const { error, value } = validateModifyTaskStatusEntry(status);
+  const { error, value } = validateModifyTaskStatusEntry({ status });
 
-  // if (error) {
-  //   const errorMessages = error.details.map(
-  //     (err) => err.message
-  //   );
-  //   return newError(errorMessages[0], HttpStatus.FORBIDDEN);
-  // }
+  if (error) {
+    const errorMessages = error.details.map((err) => err.message);
+    return newError(errorMessages[0], HttpStatus.FORBIDDEN);
+  }
 
   const statusCode: string[] = ["to-do", "in-progress", "completed"];
 
@@ -97,14 +110,12 @@ export const modifyTaskStatusService = async (req: Request) => {
 
   if (!task) return newError("Task does not exist", HttpStatus.NOT_FOUND);
 
-  //  const _userId = typeof req.user === "string" ? null : req.user.id;
-
-  // if (task.userId !== req.user.id) {
-  //   return newError(
-  //     "You cannot change the status of another user",
-  //     HttpStatus.FORBIDDEN
-  //   );
-  // }
+  if (task.userId !== loggedInUserId) {
+    return newError(
+      "You cannot change the status of another user",
+      HttpStatus.FORBIDDEN
+    );
+  }
 
   if (task.status === statusCode[status])
     return newError(
@@ -137,7 +148,7 @@ export const retrieveFilteredTasksByTagService = async (req: Request) => {
 };
 
 export const addCommentToTaskService = async (req: Request) => {
-  const userId = typeof req.user === "object" ? req.user.id : ""; //Fetching Logged in user
+  const loggedInUserId = typeof req.user === "object" ? req.user.id : ""; //Fetching Logged in user
 
   const { taskId } = req.params;
 
@@ -150,7 +161,7 @@ export const addCommentToTaskService = async (req: Request) => {
     return newError(errorMessages[0], HttpStatus.FORBIDDEN);
   }
 
-  const data = { comment: value.comment, taskId, userId };
-  
+  const data = { comment: value.comment, taskId, userId: loggedInUserId };
+
   await commentRespository.createComment(data);
 };

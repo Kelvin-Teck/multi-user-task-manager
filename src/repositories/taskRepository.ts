@@ -13,10 +13,20 @@ export const retriveSingleTaskById = async (
   return task;
 };
 
+export const retrieveTaskSingleByTitleAndDescription = async (
+  data: any
+): Promise<Task | null> => {
+  const taskInfo = await db.Task.findOne({
+    where: { title: data.title, description: data.description },
+  });
+
+  return taskInfo;
+};
+
 export const retriveSingleTaskByUserId = async (
   userId: string
 ): Promise<Task | null> => {
-    const task = await db.Task.findOne({ where: { userId } });
+  const task = await db.Task.findOne({ where: { userId } });
 
   return task;
 };
@@ -25,22 +35,27 @@ export const assignTask = async (
   assigneeId: string,
   taskId: string
 ): Promise<void> => {
-
   await db.Task.update(
     { assigneeId: assigneeId }, // Fields to update
     { where: { id: taskId } }
   );
 };
 
+export const modifyTaskStatus = async (
+  status: string,
+  userId: string
+): Promise<void> => {
+  await db.Task.update(
+    { status },
+    {
+      where: { userId },
+    }
+  );
+};
 
-export const modifyTaskStatus = async (status: string, userId:string): Promise<void> => {
-    await db.Task.update({status}, {
-        where:{userId}  
-    })
-}
-
-
-export const retrieveAllTasksByTag = async (data: any): Promise<Task[] | null> => {
-  const taskInfo = await db.Task.findAll({where: {tag: data.tagName}})
+export const retrieveAllTasksByTag = async (
+  data: any
+): Promise<Task[] | null> => {
+  const taskInfo = await db.Task.findAll({ where: { tag: data.tagName } });
   return taskInfo;
-}
+};

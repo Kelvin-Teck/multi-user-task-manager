@@ -49,7 +49,14 @@ export const AuthGuard = async (
 
     next();
   } catch (error: any) {
-    return res.status(HttpStatus.FORBIDDEN).json(sendError(`Invalid Token ----- ${error.message}`, HttpStatus.FORBIDDEN));
+    return res
+      .status(HttpStatus.FORBIDDEN)
+      .json(
+        sendError(
+          `Invalid Token --- ${error.message}...Try Logging in again`,
+          HttpStatus.FORBIDDEN
+        )
+      );
   }
 };
 
