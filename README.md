@@ -94,3 +94,32 @@ REFRESH_TOKEN_SECRET=your_refresh_token_secret
 REFRESH_TOKEN_EXP=10d
 
 </pre>
+
+4. Run migrations
+   Run the following command
+   Using npm:
+
+<pre>
+$npm run migration up
+
+</pre>
+
+Using yarn:
+
+<pre>
+yarn run migration up
+</pre>
+
+6. Start the application
+
+Using npm:
+
+<pre>
+$ npm run dev
+</pre>
+
+Using yarn:
+
+<pre>
+$ yarn run dev
+</pre>
