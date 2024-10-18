@@ -39,6 +39,10 @@ export default class Task extends core.Model<
   @Attribute(core.DataTypes.UUID)
   declare assigneeId: string;
 
+  @Attribute(core.DataTypes.ENUM("urgent", "bug", "feature"))
+    @Default("feature")
+  declare tag: core.CreationOptional<string>;
+
   @Attribute(core.DataTypes.DATE)
   @Default(core.DataTypes.NOW)
   declare createdAt: Date;
@@ -88,6 +92,11 @@ export default class Task extends core.Model<
             model: User, // Reference to the User model
             key: "id", // Foreign key in the User model
           },
+        },
+        tag: {
+          type: core.DataTypes.ENUM("urgent", "bug", "feature"),
+          allowNull: false,
+          defaultValue: "feature",
         },
         createdAt: {
           type: core.DataTypes.DATE,

@@ -1,4 +1,4 @@
-import { assignTaskService, createTaskService, modifyTaskStatusService } from "@services/taskService";
+import { assignTaskService, createTaskService, modifyTaskStatusService, retrieveFilteredTasksByTagService } from "@services/taskService";
 import { HttpStatus, sendError, sendSuccess } from "@utils";
 import { NextFunction, Request, Response } from "express";
 
@@ -71,3 +71,23 @@ export const modifyTaskStatusController = async (
       .json(sendError(error.message, HttpStatus.INTERNAL_SERVER_ERROR));
   }
 };
+
+export const retriveFilteredTasksByTagController = async (req:Request, res: Response):Promise<any> => {
+    try {
+      const response = await retrieveFilteredTasksByTagService(req);
+
+      res
+        .status(HttpStatus.CREATED)
+        .json(sendSuccess("Task retrieved Successfully", response));
+    } catch (error: any) {
+      if (error.status) {
+        return res
+          .status(error.status)
+          .json(sendError(error.message, error.staus));
+      }
+
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(sendError(error.message, HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+}

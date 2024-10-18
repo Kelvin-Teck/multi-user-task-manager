@@ -1,6 +1,7 @@
 import { taskRepository, userRepository } from "@repositories";
 import { retriveSingleTaskById } from "@repositories/taskRepository";
 import {
+  validateFilterTasksByTagEntry,
   validateModifyTaskStatusEntry,
   validateTaskAssignmentInput,
   validateTaskInput,
@@ -12,7 +13,14 @@ export const createTaskService = async (req: Request) => {
   const { userId } = req.params;
   const { title, description, dueDate } = req.body;
 
-  const data = { title, description, dueDate, userId, status: req.body.status };
+  const data = {
+    title,
+    description,
+    dueDate,
+    userId,
+    status: req.body.status,
+    tag: req.body.tag,
+  };
   const { error, value } = validateTaskInput(data);
 
   if (error) {
@@ -72,6 +80,7 @@ export const assignTaskService = async (req: Request) => {
 export const modifyTaskStatusService = async (req: Request) => {
   const { userId } = req.params;
   const { status } = req.body;
+
   // const { error, value } = validateModifyTaskStatusEntry(status);
 
   // if (error) {
@@ -87,6 +96,15 @@ export const modifyTaskStatusService = async (req: Request) => {
 
   if (!task) return newError("Task does not exist", HttpStatus.NOT_FOUND);
 
+  //  const _userId = typeof req.user === "string" ? null : req.user.id;
+
+  // if (task.userId !== req.user.id) {
+  //   return newError(
+  //     "You cannot change the status of another user",
+  //     HttpStatus.FORBIDDEN
+  //   );
+  // }
+
   if (task.status === statusCode[status])
     return newError(
       `The Status of this task is already ${statusCode[status]}`,
@@ -94,4 +112,25 @@ export const modifyTaskStatusService = async (req: Request) => {
     );
 
   await taskRepository.modifyTaskStatus(statusCode[status], userId);
+};
+
+export const retrieveFilteredTasksByTagService = async (req: Request) => {
+  const tagName = req.query.tagName as string | undefined;
+  const data = { tagName };
+
+  const { error, value } = validateFilterTasksByTagEntry(data);
+
+  if (error) {
+    const errorMessages = error.details.map(
+      (err: { message: any }) => err.message
+    );
+    return newError(errorMessages[0], HttpStatus.FORBIDDEN);
+  }
+
+  const tasks = await taskRepository.retrieveAllTasksByTag(value);
+  if (tasks?.length === 0) {
+    return newError("No Task(s) exist with these tag", HttpStatus.NOT_FOUND);
+  }
+
+  return tasks;
 };

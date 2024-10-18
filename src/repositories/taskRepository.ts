@@ -38,3 +38,9 @@ export const modifyTaskStatus = async (status: string, userId:string): Promise<v
         where:{userId}  
     })
 }
+
+
+export const retrieveAllTasksByTag = async (data: any): Promise<Task[] | null> => {
+  const taskInfo = await db.Task.findAll({where: {tag: data.tagName}})
+  return taskInfo;
+}

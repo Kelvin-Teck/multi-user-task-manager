@@ -47,6 +47,11 @@ export const up: Migration = async ({ context: { queryInterface } }) => {
       onUpdate: "CASCADE", // Cascade on update
       onDelete: "SET NULL", // Set foreign key to null if user is deleted
     },
+    tag: {
+      type: DataTypes.ENUM("urgent", "bug", "feature"),
+      allowNull: true,
+      defaultValue: "feature",
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

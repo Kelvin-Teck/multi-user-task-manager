@@ -1,12 +1,12 @@
 import Joi, { ValidationResult } from "joi";
 import {
+  FilterTasksByTagInterface,
   ModifyTaskStatusInterface,
   TaskAssignmentInterface,
   TaskInterface,
   UserSignInInput,
   UserSinUpInput,
 } from "@interfaces";
-import { modifyTaskStatusController } from "@controllers/TaskConttroller";
 
 // Define the user schema with TypeScript types
 const userSchema = Joi.object({
@@ -83,10 +83,19 @@ const taskSchema = Joi.object({
 
   status: Joi.string()
     .valid("to-do", "in-progress", "completed")
+    .optional()
     .default("to-do") // Set default value if not provided
     .messages({
       "any.only":
         "Status must be one of the following: to-do, in-progress, completed",
+    }),
+  tag: Joi.string()
+    .valid("urgent", "bug", "feature")
+    .optional()
+    .default("feature") // Set default value if not provided
+    .messages({
+      "any.only":
+        "Tag must be one of the following: to-do, in-progress, completed",
     }),
 
   userId: Joi.string()
@@ -119,6 +128,10 @@ export const assignTaskValidationSchema = Joi.object({
 
 export const modifyTaskStatusSchema = Joi.object({
   status: Joi.number().required(),
+});
+
+export const filterTasksByTagSchema = Joi.object({
+  tagName: Joi.string().valid("urgent", "bug", "feature").required(),
 });
 
 // Reusable validation function with explicit types
@@ -154,6 +167,11 @@ export const validateModifyTaskStatusEntry = (
   userData: ModifyTaskStatusInterface
 ): ValidationResult => {
   return modifyTaskStatusSchema.validate(userData, { abortEarly: false });
+};
+export const validateFilterTasksByTagEntry = (
+  userData: FilterTasksByTagInterface
+): ValidationResult => {
+  return filterTasksByTagSchema.validate(userData, { abortEarly: false });
 };
 
 // Admin validation

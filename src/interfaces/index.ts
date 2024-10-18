@@ -1,6 +1,5 @@
 import { JwtPayload } from "jsonwebtoken";
 
-
 export interface UserInterface {
   readonly id: string;
   firstName: string;
@@ -8,7 +7,7 @@ export interface UserInterface {
   email: string;
   phoneNumber: string;
   password: string;
-  role: 'admin' | 'user'
+  role: "admin" | "user";
 }
 export interface UserSinUpInput {
   firstName: string;
@@ -17,7 +16,6 @@ export interface UserSinUpInput {
   phoneNumber: string;
   password: string;
 }
-
 
 export interface UserSignInInput {
   email: string;
@@ -32,7 +30,8 @@ export interface JwtSignPayload {
 
 export interface CustomJwtPayload extends JwtPayload {
   exp?: number;
-  role: 'admin' | 'user'
+  id: string;
+  role: "admin" | "user";
 }
 
 export interface TaskInterface {
@@ -40,15 +39,20 @@ export interface TaskInterface {
   title: string;
   description: string;
   dueDate: string;
-  status?: 'to-do' | 'in-progress' | 'completed';
+  status?: "to-do" | "in-progress" | "completed";
   userId?: string;
+  tag?: "urgent" | "bug" | "feature";
 }
 
-export interface TaskAssignmentInterface{
+export interface TaskAssignmentInterface {
   taskId: string;
   assigneeId: string;
 }
 
-export interface ModifyTaskStatusInterface{
-  status: number
+export interface ModifyTaskStatusInterface {
+  status: number;
+}
+
+export interface FilterTasksByTagInterface{
+  tagName: string | undefined;
 }
