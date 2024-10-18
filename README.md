@@ -20,37 +20,43 @@ Make sure you have the following installed on your machine:
 
 1. Clone the Repo
 
-<pre> ```
+<pre> 
 bash 
 
     $ git clone https://github.com/Kelvin-Teck/multi-user-task-manager.git 
-    ``` 
+    
 </pre>
 
 2. Navigate to the Project Folder
-<pre> ```
+<pre> 
 bash 
 
-    $ cd project-folder 
-    ``` 
+    $ cd project-folder
+
 </pre>
 
 3. Install Dependencies
    Using npm
 
-<pre> ```bash # Install dependencies 
+<pre> 
+
+  bash 
+  
+  # Install dependencies 
      
-     $npm install ``` 
+     $ npm install 
      
      </pre>
 
      Using Yarn:
 
-     $yarn install
+     $ yarn install
 
-<pre> ```bash
+<pre> 
+
+ bash
      
-     $yarn install ``` 
+     $ yarn install 
      
      </pre>
 
@@ -102,7 +108,7 @@ REFRESH_TOKEN_EXP=10d
 <pre>
 bash
 
-$npm run migration up
+$ npm run migration up
 
 </pre>
 
@@ -111,7 +117,7 @@ Using yarn:
 <pre>
 bash
 
-yarn run migration up
+$ yarn run migration up
 </pre>
 
 6. Start the application
