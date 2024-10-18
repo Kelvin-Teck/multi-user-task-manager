@@ -144,5 +144,26 @@ $ yarn run dev
 <pre> 
 bash
 
-http://localhost:<your_port_env>
+http://localhost:4000
 </pre>
+Replace <pre>4000</pre> with the actual port number you specified in the .env file.
+
+### Technology Used
+
+<pre>
+
+
+This project is built using the following technologies:
+
+### Backend
+
+- **Node.js**: A JavaScript runtime built on Chrome's V8 engine, which allows you to build scalable server-side applications.
+- **Express.js**: A fast and lightweight web framework for Node.js, used to build RESTful APIs and handle HTTP requests.
+- **Sequelize**: A promise-based Node.js ORM for managing and interacting with SQL databases. It supports popular databases like MySQL, PostgreSQL, SQLite, and MSSQL.
+- **TypeScript**: A statically typed superset of JavaScript that adds type definitions to improve code quality and development experience.
+- **Nodemailer**: A module for sending emails from Node.js applications.
+- **Express-Handlebars**: A view engine for Express used in rendering dynamic email templates.
+
+### Database
+
+- **PostgreSQL/MySQL/SQLite**: Relational databases used to store and manage data. The project is built with Sequelize, so it supports various SQL databases (e.g., PostgreSQL, MySQL, SQLite). You can configure the preferred database in the environment variables.</pre>
