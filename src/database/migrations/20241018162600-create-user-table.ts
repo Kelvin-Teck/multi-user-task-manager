@@ -6,7 +6,7 @@ export const up: Migration = async ({ context: { queryInterface } }) => {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
     },
     firstName: {
       type: DataTypes.STRING,
@@ -27,7 +27,7 @@ export const up: Migration = async ({ context: { queryInterface } }) => {
       unique: true,
     },
     role: {
-      type: DataTypes.ENUM('admin',  'user'),
+      type: DataTypes.ENUM("admin", "user"),
       allowNull: false,
     },
     password: {

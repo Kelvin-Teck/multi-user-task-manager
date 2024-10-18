@@ -1,3 +1,4 @@
+import { sendAssigneeNotificationMail } from "@mailers/task.mail";
 import {
   commentRespository,
   notificationRepository,
@@ -83,6 +84,8 @@ export const assignTaskService = async (req: Request) => {
   const assignee = await userRepository.retriveSingleUserById(
     inputedData.assigneeId
   );
+console.log(assignee)
+
   if (!assignee) {
     return newError("This is User does not exist", HttpStatus.NOT_FOUND);
   }
@@ -106,15 +109,8 @@ export const assignTaskService = async (req: Request) => {
 
   await notificationRepository.createNotification(notificationData); //create notification
   /*Send Out a Notificatin E-mail */
-  //  const mailOptions = {
-  //     from: 'your-email@gmail.com',
-  //     to: 'recipient-email@example.com',
-  //     subject: 'Test Email with Handlebars',
-  //     template: 'emailTemplate',
-  //     context: {
-  //       name: 'John Doe',
-  //     },
-  //   };
+  // const emailData = { assigneeEmailAddress: assignee.email, assigneeFirstName: assignee.firstName, assigneeLastName: assignee.lastName };
+  // await sendAssigneeNotificationMail(emailData)
 };
 
 export const modifyTaskStatusService = async (req: Request) => {
