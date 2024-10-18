@@ -46,4 +46,5 @@ app.get("/", (req: Request, res: Response) => {
 // Database Error Handler Midddleware
 app.use(DatabaseError.handleError);
 
+
 export default app;

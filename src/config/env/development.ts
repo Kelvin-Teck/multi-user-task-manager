@@ -5,8 +5,11 @@ export default {
     port: process.env.PORT,
   },
   mail: {
-    user: process.env.MAIL_USER!,
-    pass: process.env.MAIL_PASS!,
+    host: process.env.EMAIL_HOST!,
+    port: Number(process.env.EMAIL_PORT),
+    service: process.env.EMAIL_SERVICE!,
+    secure: false,
+    auth: { user: process.env.EMAIL_USER!, pass: process.env.EMAIL_PASS! },
   },
   database: {
     host: process.env.DEV_DATABASE_HOST!,

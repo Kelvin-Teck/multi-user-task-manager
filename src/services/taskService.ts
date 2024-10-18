@@ -1,5 +1,6 @@
 import {
   commentRespository,
+  notificationRepository,
   taskRepository,
   userRepository,
 } from "@repositories";
@@ -50,6 +51,8 @@ export const createTaskService = async (req: Request) => {
 };
 
 export const assignTaskService = async (req: Request) => {
+  // Fetching logged In User
+  const loggedInUserId = typeof req.user === "object" ? req.user.id : null;
   const { taskId, assigneeId } = req.body;
 
   const data = { taskId, assigneeId };
@@ -89,6 +92,26 @@ export const assignTaskService = async (req: Request) => {
   }
 
   await taskRepository.assignTask(inputedData.assigneeId, inputedData.taskId);
+
+  const assigner = await userRepository.retriveSingleUserById(loggedInUserId);
+
+  const notificationData = {
+    userId: assigneeId,
+    title: "Task Assignment",
+    message: `You have been assigned a task by ${assigner?.firstName} ${assigner?.lastName} `,
+  };
+
+  await notificationRepository.createNotification(notificationData);
+  /*Send Out a Notificatin E-mail */
+  //  const mailOptions = {
+  //     from: 'your-email@gmail.com',
+  //     to: 'recipient-email@example.com',
+  //     subject: 'Test Email with Handlebars',
+  //     template: 'emailTemplate',
+  //     context: {
+  //       name: 'John Doe',
+  //     },
+  //   };
 };
 
 export const modifyTaskStatusService = async (req: Request) => {
