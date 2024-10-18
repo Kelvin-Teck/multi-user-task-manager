@@ -53,5 +53,14 @@ Using npm
      $yarn install ``` 
      
      </pre>
-     
-3. Set up The 
+
+3. Set up The Environment Variables
+<pre>
+
+# Example of .env file
+PORT=3000
+EMAIL_USER=your-email@example.com
+EMAIL_PASS=your-email-password
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+</pre>
