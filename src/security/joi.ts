@@ -3,6 +3,7 @@ import {
   FilterTasksByTagInterface,
   ModifyTaskStatusInterface,
   TaskAssignmentInterface,
+  TaskCommentInterface,
   TaskInterface,
   UserSignInInput,
   UserSinUpInput,
@@ -134,6 +135,10 @@ export const filterTasksByTagSchema = Joi.object({
   tagName: Joi.string().valid("urgent", "bug", "feature").required(),
 });
 
+export const commentValidationSchema = Joi.object({
+  comment: Joi.string().required().min(1).max(1000),
+});
+
 // Reusable validation function with explicit types
 
 // Users Validation
@@ -168,10 +173,17 @@ export const validateModifyTaskStatusEntry = (
 ): ValidationResult => {
   return modifyTaskStatusSchema.validate(userData, { abortEarly: false });
 };
+
 export const validateFilterTasksByTagEntry = (
   userData: FilterTasksByTagInterface
 ): ValidationResult => {
   return filterTasksByTagSchema.validate(userData, { abortEarly: false });
+};
+
+export const validateTaskComment = (
+  userData: TaskCommentInterface
+): ValidationResult => {
+  return commentValidationSchema.validate(userData, { abortEarly: false });
 };
 
 // Admin validation

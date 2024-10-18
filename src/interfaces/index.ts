@@ -53,6 +53,10 @@ export interface ModifyTaskStatusInterface {
   status: number;
 }
 
-export interface FilterTasksByTagInterface{
+export interface FilterTasksByTagInterface {
   tagName: string | undefined;
+}
+
+export interface TaskCommentInterface {
+  comment: string;
 }

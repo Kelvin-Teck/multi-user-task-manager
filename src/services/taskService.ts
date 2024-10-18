@@ -1,9 +1,10 @@
-import { taskRepository, userRepository } from "@repositories";
+import { commentRespository, taskRepository, userRepository } from "@repositories";
 import { retriveSingleTaskById } from "@repositories/taskRepository";
 import {
   validateFilterTasksByTagEntry,
   validateModifyTaskStatusEntry,
   validateTaskAssignmentInput,
+  validateTaskComment,
   validateTaskInput,
 } from "@security/joi";
 import { HttpStatus, newError } from "@utils";
@@ -133,4 +134,23 @@ export const retrieveFilteredTasksByTagService = async (req: Request) => {
   }
 
   return tasks;
+};
+
+export const addCommentToTaskService = async (req: Request) => {
+  const userId = typeof req.user === "object" ? req.user.id : ""; //Fetching Logged in user
+
+  const { taskId } = req.params;
+
+  const { comment } = req.body;
+
+  const { error, value } = validateTaskComment({ comment });
+
+  if (error) {
+    const errorMessages = error.details.map((err) => err.message);
+    return newError(errorMessages[0], HttpStatus.FORBIDDEN);
+  }
+
+  const data = { comment: value.comment, taskId, userId };
+  
+  await commentRespository.createComment(data);
 };
