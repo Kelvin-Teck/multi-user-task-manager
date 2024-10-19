@@ -84,7 +84,7 @@ export const assignTaskService = async (req: Request) => {
   const assignee = await userRepository.retriveSingleUserById(
     inputedData.assigneeId
   );
-console.log(assignee)
+
 
   if (!assignee) {
     return newError("This is User does not exist", HttpStatus.NOT_FOUND);
@@ -109,8 +109,8 @@ console.log(assignee)
 
   await notificationRepository.createNotification(notificationData); //create notification
   /*Send Out a Notificatin E-mail */
-  // const emailData = { assigneeEmailAddress: assignee.email, assigneeFirstName: assignee.firstName, assigneeLastName: assignee.lastName };
-  // await sendAssigneeNotificationMail(emailData)
+  const emailData = { assigneeEmailAddress: assignee.email, assigneeFirstName: assignee.firstName, assigneeLastName: assignee.lastName };
+  await sendAssigneeNotificationMail(emailData)
 };
 
 export const modifyTaskStatusService = async (req: Request) => {

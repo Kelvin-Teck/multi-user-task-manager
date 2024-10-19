@@ -27,7 +27,7 @@ const hbs = create({
   // Handlebars options for Nodemailer
   const handlebarsOptions = {
     viewEngine: hbs, // Pass the Handlebars instance
-    viewPath: path.resolve(__dirname, "../mailer/views/"), // Path to the email templates
+    viewPath: path.resolve(__dirname, "../mailers/views/"), // Path to the email templates
     extName: ".hbs", // File extension
   };
 

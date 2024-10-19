@@ -1,14 +1,16 @@
 import transporter from "@config/transporter";
 
 export const sendAssigneeNotificationMail = async (userData: any) => {
+  console.log(userData)
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: userData.assigneeEmailAddress,
     subject: "Task Assignment ",
-    template: "assigntask.hbs",
+    template: "assigntask",
     context: {
       firstName: userData.assigneeFirstName,
-      lastname: userData.assigneeLastName,
+      lastName: userData.assigneeLastName,
     },
   };
 
@@ -19,3 +21,4 @@ export const sendAssigneeNotificationMail = async (userData: any) => {
     console.error("Error sending email:", error);
   }
 };
+
