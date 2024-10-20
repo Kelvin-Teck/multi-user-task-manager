@@ -1,7 +1,7 @@
 import transporter from "@config/transporter";
 
 export const sendAssigneeNotificationMail = async (userData: any) => {
-  console.log(userData)
+
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
@@ -17,6 +17,7 @@ export const sendAssigneeNotificationMail = async (userData: any) => {
   try {
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent: " + info.response);
+
   } catch (error) {
     console.error("Error sending email:", error);
   }

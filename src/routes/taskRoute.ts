@@ -16,7 +16,7 @@ router
 router
   .patch("/assign-task", [AuthGuard], assignTaskController)//task assignment route
   .patch(
-    "/modify-task-status/:userId",
+    "/modify-task-status/:taskId",
     [AuthGuard],
     modifyTaskStatusController
   );//task status modification route

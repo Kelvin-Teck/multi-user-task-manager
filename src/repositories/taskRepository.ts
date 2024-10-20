@@ -43,12 +43,12 @@ export const assignTask = async (
 
 export const modifyTaskStatus = async (
   status: string,
-  userId: string
+  taskId: string
 ): Promise<void> => {
   await db.Task.update(
     { status },
     {
-      where: { userId },
+      where: {id: taskId },
     }
   );//update the status Row of Task table
 };

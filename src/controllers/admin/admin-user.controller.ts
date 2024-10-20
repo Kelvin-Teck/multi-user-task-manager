@@ -6,7 +6,7 @@ export const createAdminController = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  console.log(req.user);
+  
   try {
     const response = await createAdminService(req);//Response From Service
 

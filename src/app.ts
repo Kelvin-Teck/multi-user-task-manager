@@ -5,6 +5,7 @@ import adminUserRoute from "@routes/admin/admin-user.route";
 import taskRoute from "@routes/taskRoute";
 import commentRoute from "@routes/commentRoute";
 import adminCommentRoute from "@routes/admin/admin-comment.route";
+import adminTaskRoute from "@routes/admin/admin-task.route";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -32,6 +33,9 @@ app.use("/api/v1/comment", commentRoute);
 /* Admin*/
 app.use("/api/v1/admin/user", adminUserRoute);
 app.use("/api/v1/admin/comment", adminCommentRoute);
+app.use("/api/v1/admin/task", adminTaskRoute);
+
+
 
 // This is middleware to Check the Status of the Server
 app.get("/", (req: Request, res: Response) => {

@@ -114,9 +114,10 @@ export const assignTaskService = async (req: Request) => {
 };
 
 export const modifyTaskStatusService = async (req: Request) => {
-  const loggedInUserId = typeof req.user === "object" ? req.user.id : ""; //Fetching Logged in user
+  const loggedInUserId = typeof req.user === "object" ? req.user : ""; //Fetching Logged in user id
+  const loggedInUserRole = typeof req.user === "object" ? req.user.role : ""; //Fetching Logged in user id
 
-  const { userId } = req.params;
+  const { taskId } = req.params;
   const { status } = req.body;
 
   // Validate user input
@@ -127,26 +128,33 @@ export const modifyTaskStatusService = async (req: Request) => {
     return newError(errorMessages[0], HttpStatus.FORBIDDEN);
   }
 
-  const statusCode: string[] = ["to-do", "in-progress", "completed"]; //possible status data 0,1,2
+  /*
+  Possible status data 0,1,2
+  
+  0 - to-do
+  1 - in-progress
+  2 - completed
+  */
+  const statusCode: string[] = ["to-do", "in-progress", "completed"];
 
-  const task = await taskRepository.retriveSingleTaskByUserId(userId);
+  const task = await taskRepository.retriveSingleTaskById(taskId);
 
   if (!task) return newError("Task does not exist", HttpStatus.NOT_FOUND);
 
-  if (task.userId !== loggedInUserId) {
+  if (task.userId !== loggedInUserId && loggedInUserRole !== "admin") {
     return newError(
       "You cannot change the status of another user",
       HttpStatus.FORBIDDEN
     );
   }
 
-  if (task.status === statusCode[status])
+  if (task.status === statusCode[value.status])
     return newError(
       `The Status of this task is already ${statusCode[status]}`,
       HttpStatus.CONFLICT
     );
 
-  await taskRepository.modifyTaskStatus(statusCode[status], userId); //modify Task Status
+  await taskRepository.modifyTaskStatus(statusCode[value.status], taskId); //modify Task Status
 };
 
 export const retrieveTasksService = async (req: Request) => {
